@@ -1,4 +1,5 @@
 const {app, BrowserWindow, Menu} = require('electron')
+const sc = require('electron-localshortcut')
 const path = require('path')
 const url = require('url')
 
@@ -18,11 +19,12 @@ createWindow = () => {
     // Open the DevTools.
     win.webContents.openDevTools()
 
-     // Emitted when the window is closed.
-    win.on('closed', () => {
-        // Can store windows in an array if app supports multi windows
-        win = null
-    })
+    // Emitted when the window is closed.
+    collectGarbage(win)
+    // win.on('closed', () => {
+    //     // Can store windows in an array if app supports multi windows
+    //     win = null
+    // })
 
     // Override pre-build menu with custom menu
     const customMenu = Menu.buildFromTemplate(menuTemplate)
@@ -40,11 +42,11 @@ app.on('activate', () => {
 })
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') app.quit()
-})
+// app.on('window-all-closed', () => {
+//     // On OS X it is common for applications and their menu bar
+//     // to stay active until the user quits explicitly with Cmd + Q
+//     if (process.platform !== 'darwin') app.quit()
+// })
 
 // Create Custom Menu Template
 const menuTemplate = [
@@ -78,4 +80,35 @@ chooseQuiz = () => {
         protocol: 'file:',
         slashes: true
     }))
+    // TODO
+    // Clear multiple Windows
+
+    close_current(quizWin, command_by_platform('W'))
+
+    // collectGarbage(quizWin)
 }
+
+// Clear closed windows from memory
+collectGarbage = (currentWindow) => currentWindow = null
+
+// Close current winddow
+close_current = (currentWindow, command) => sc.register(currentWindow, command, () => currentWindow.close())
+
+// Set DevTools on active Window
+if (process.env.NODE_ENV !== 'production') {
+    menuTemplate.push({
+        label: 'Developer Tools',
+        submenu: [
+            {
+                label: 'Activate DevTools',
+                click(item, focusedWindow) {focusedWindow.toggleDevTools()},
+                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    })
+}
+
+command_by_platform = (command) => 'darwin' ? 'Command+'+command : 'Ctrl+'+command
