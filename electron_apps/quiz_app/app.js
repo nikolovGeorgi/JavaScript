@@ -61,10 +61,28 @@ const menuTemplate = [
                 label: 'Child',
                 accelerator: process.platform == 'darwin'? 'Command+E' : 'Ctrl+E',
                 click() { childWin() }
+            },
+            {
+                label: 'Youtube',
+                accelerator: process.platform == 'darwin'? 'Command+U' : 'Ctrl+U',
+                click () { youtube() }
             }
         ],
     }
 ]
+// commandPlatform = (command) => {
+//     accelerator: process.platform == 'darwin'? 'Command+'+command : 'Ctrl+'+command
+// }
+youtube = () => {
+    uWindow = new BrowserWindow({height: 400, width: 800})
+    uWindow.loadURL('http://youtube.com')
+    uWindow.once('ready-to-show', () => {
+        uWindow.show()
+    })
+
+    close_current(uWindow, command_by_platform('W'))
+    collectGarbage(uWindow)
+}
 // Test child window
 childWin = () => {
     // Link child window to parent
