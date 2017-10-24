@@ -2,7 +2,7 @@
   "name": "quiz_app",
   "version": "1.0.0",
   "description": "Quiz App",
-  "main": "app.js",
+  "main": ".src/app.js",
   "scripts": {
     "start": "electron ."
   },
