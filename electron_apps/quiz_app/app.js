@@ -8,14 +8,14 @@ let win, quizWin
 createWindow = () => {
     // Create Browser Window
     win = new BrowserWindow({width: 800, height: 600})
-    win.loadURL('https://youtube.com')
+    // win.loadURL('https://youtube.com')
 
     // Load index.html
-    // win.loadURL(url.format({
-    //     pathname: path.join(__dirname, 'public/index.html'),
-    //     protocol: 'file:',
-    //     slashes: true
-    // }))
+    win.loadURL(url.format({
+        pathname: path.join(__dirname, 'public/index.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
 
     // Open the DevTools.
     win.webContents.openDevTools()
